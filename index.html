@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Будь моей валентинкой? 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: float 8s infinite;
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 60px 40px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .big-heart {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: heartbeat 1.5s infinite;
+            display: inline-block;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.1);
+            }
+            50% {
+                transform: scale(1);
+            }
+        }
+
+        h1 {
+            color: #e91e63;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .message {
+            color: #555;
+            font-size: 1.3em;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .yes-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .yes-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        .no-btn {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .no-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .phrase {
+            margin-top: 30px;
+            font-size: 1.3em;
+            color: #e91e63;
+            font-weight: bold;
+            min-height: 40px;
+            animation: bounceIn 0.6s;
+        }
+
+        .response {
+            margin-top: 30px;
+            font-size: 1.5em;
+            color: #e91e63;
+            font-weight: bold;
+            display: none;
+            animation: bounceIn 0.6s;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+            .message {
+                font-size: 1.1em;
+            }
+            .container {
+                padding: 40px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts-container" id="hearts"></div>
+    
+    <div class="container">
+        <div class="big-heart">❤️</div>
+        <h1>Будь моей валентинкой?</h1>
+        
+        <div class="button-container">
+            <button class="yes-btn" id="yesBtn" onclick="sayYes()">Да! 💖</button>
+            <button class="no-btn" id="noBtn" onclick="clickNo()">Нет</button>
+        </div>
+        
+        <div class="phrase" id="phrase"></div>
+        
+        <div class="response" id="response"></div>
+    </div>
+
+    <div class="celebration" id="celebration"></div>
+
+    <script>
+        // Create floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            document.getElementById('hearts').appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 8000);
+        }
+
+        setInterval(createHeart, 300);
+
+        // Counter for "No" clicks
+        let noClickCount = 0;
+        const phrases = [
+            "С хуя ли? 🤨",
+            "Тебя не спрашивали 😤",
+            "У тебя нет выбора 😏",
+            "Серьёзно? 🙄",
+            "Давай ещё раз подумаем 💭",
+            "Неправильный ответ ❌",
+            "Попробуй ещё раз 🔄"
+        ];
+
+        // Handle "No" button click
+        function clickNo() {
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
+            const phraseDiv = document.getElementById('phrase');
+            
+            // Show random phrase
+            const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+            phraseDiv.innerHTML = randomPhrase;
+            
+            // Shrink "No" button
+            noClickCount++;
+            const newSize = Math.max(0.3, 1 - (noClickCount * 0.15));
+            noBtn.style.transform = `scale(${newSize})`;
+            
+            // Grow "Yes" button
+            const yesSize = 1 + (noClickCount * 0.2);
+            yesBtn.style.transform = `scale(${yesSize})`;
+            
+            // Hide "No" button if clicked too many times
+            if (noClickCount >= 5) {
+                noBtn.style.display = 'none';
+                phraseDiv.innerHTML = 'Кнопка "Нет" исчезла. У тебя остался только один выбор 😈';
+            }
+        }
+
+        // Handle "Yes" response
+        function sayYes() {
+            const response = document.getElementById('response');
+            response.innerHTML = '🎉 Ура! Я так счастлив! Ты делаешь меня самым счастливым! 💕✨';
+            response.style.display = 'block';
+            
+            // Hide buttons
+            document.querySelector('.button-container').style.display = 'none';
+            
+            // Create celebration effect
+            createCelebration();
+        }
+
+        function createCelebration() {
+            const celebration = document.getElementById('celebration');
+            const colors = ['❤️', '💕', '💖', '💗', '💝', '💞', '💓'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.style.position = 'absolute';
+                    heart.style.fontSize = Math.random() * 30 + 20 + 'px';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.top = '-50px';
+                    heart.innerHTML = colors[Math.floor(Math.random() * colors.length)];
+                    heart.style.animation = 'float 4s ease-in forwards';
+                    celebration.appendChild(heart);
+                    
+                    setTimeout(() => heart.remove(), 4000);
+                }, i * 100);
+            }
+        }
+    </script>
+</body>
+</html>
